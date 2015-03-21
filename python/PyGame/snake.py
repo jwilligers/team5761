@@ -1,22 +1,16 @@
 import pygame
-import time
+#import time
 import random
+import colours
 
 pygame.init()
-
-white = (255, 255, 255)
-black = (0, 0, 0)
-red = (255, 0, 0)
-green = (0, 155, 0)
-blue = (0, 0, 255)
-purple = (255, 0, 255)
-yellow = (255, 255, 0)
 
 
 display_width = 1000
 display_height = 700
 blockSize = 15
 FPS = 30
+loop = True
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Snake')
@@ -28,7 +22,7 @@ pygame.display.flip()
 
 def snake(blockSize, snakeList):
     for segment in snakeList:
-        pygame.draw.rect(gameDisplay, green, [segment[0], segment[1], blockSize, blockSize])
+        pygame.draw.rect(gameDisplay, colours.green, [segment[0], segment[1], blockSize, blockSize])
 
 def message_to_screen(msg,colour):
     screen_text = font.render(msg, True, colour)
@@ -56,7 +50,7 @@ def gameLoop():
     while not gameExit:
 
         while gameOver == True:
-            gameDisplay.fill(white)
+            gameDisplay.fill(colours.white)
             message_to_screen("Game over. Final Score = " + str(snakeLength), red)
             pygame.display.update()
 
@@ -87,16 +81,28 @@ def gameLoop():
                     lead_x_change = 0
                     lead_y_change = blockSize
 
-        if lead_x >= display_width or lead_x <= 0 or lead_y >= display_height or lead_y <= 0:
-            gameOver = True
+        if (loop == False):
+            if lead_x >= display_width or lead_x <= 0 or lead_y >= display_height or lead_y <= 0:
+                gameOver = True
+        else:
+            if lead_x >= display_width:
+                lead_x -= display_width
+            if lead_x <= 0:
+                lead_x += display_width
+
+            if lead_y >= display_height:
+                lead_y -= display_height
+            if lead_y <= 0:
+                lead_y += display_height
+
 
         lead_x += lead_x_change
         lead_y += lead_y_change
 
 
-        gameDisplay.fill(white)
+        gameDisplay.fill(colours.white)
         AppleThickness = 20
-        pygame.draw.rect(gameDisplay, red, [randAppleX, randAppleY, AppleThickness, AppleThickness])
+        pygame.draw.rect(gameDisplay, colours.red, [randAppleX, randAppleY, AppleThickness, AppleThickness])
 
         snakeHead = []
         snakeHead.append(lead_x)
