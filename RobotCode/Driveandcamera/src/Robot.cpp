@@ -12,8 +12,8 @@ public:
 	{
 	}
  
-	virtual float GetX(JoystickHand hand) { return -m_joystick->GetX(hand) / 2; }
-	virtual float GetY(JoystickHand hand) { return m_joystick->GetY(hand) / 2; }
+	virtual float GetX(JoystickHand hand) { return -m_joystick->GetX(hand) * (-m_joystick->GetThrottle()+1)/2; }
+	virtual float GetY(JoystickHand hand) { return m_joystick->GetY(hand) * (-m_joystick->GetThrottle()+1)/2; }
 	virtual float GetZ() { return m_joystick->GetZ(); }
 	virtual float GetTwist() { return m_joystick->GetTwist(); }
 	virtual float GetThrottle() { return m_joystick->GetThrottle(); }
@@ -42,6 +42,7 @@ class Robot: public IterativeRobot
 	LiveWindow *lw;
 	Servo* nerfServo;
 	int autoLoopCounter;
+
  
 public:
 	Robot() :
@@ -100,7 +101,8 @@ private:
 	void TeleopPeriodic()
 	{
 		myRobot.ArcadeDrive(rampedStick); // drive with arcade style (use right stick)
-		nerfServo->Set(rampedStick.GetThrottle());
+		nerfServo->Set((rampedStick.GetTwist()+1)/2);
+
 	}
  
 	void TestPeriodic()
