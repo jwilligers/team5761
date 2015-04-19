@@ -40,7 +40,7 @@ class Robot: public IterativeRobot
 	RampedJoystick rampedStick;
 
 	LiveWindow *lw;
-	Servo* nerfServo;
+	Servo nerfServo;
 	int autoLoopCounter;
 
  
@@ -50,6 +50,7 @@ public:
 		stick(0),		// as they are declared above.
 		rampedStick(&stick),
 		lw(NULL),
+		nerfServo(2),
 		autoLoopCounter(0)
 	{
 		myRobot.SetExpiration(0.1);
@@ -62,7 +63,7 @@ private:
 		CameraServer::GetInstance()->SetQuality(50);
 		//the camera name (ex "cam0") can be found through the roborio web interface
 		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
-		nerfServo = new Servo(2);
+
 	}
  
 	void AutonomousInit()
@@ -101,8 +102,8 @@ private:
 	void TeleopPeriodic()
 	{
 		myRobot.ArcadeDrive(rampedStick); // drive with arcade style (use right stick)
-		nerfServo->Set((rampedStick.GetTwist()+1)/2);
-
+		nerfServo.Set((rampedStick.GetTwist()+1)/2);
+		SmartDashboard.PutData("test", "test");
 	}
  
 	void TestPeriodic()
